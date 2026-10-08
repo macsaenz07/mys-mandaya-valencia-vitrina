@@ -1,0 +1,31 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-fondo: #f6f7f5;
+  --color-tarjeta: #ffffff;
+  --color-texto: #1c1917;
+  --color-suave: #6b6b66;
+  --color-borde: #e4e4df;
+  --color-campo: #f1f2ee;
+  --color-marca: #0f766e;
+  --color-marca-fuerte: #115e59;
+  --color-acento: #f59e0b;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+.dark {
+  --color-fondo: #111312;
+  --color-tarjeta: #1b1e1d;
+  --color-texto: #f1f2ee;
+  --color-suave: #a3a39c;
+  --color-borde: #2c302e;
+  --color-campo: #232725;
+  --color-marca: #2dd4bf;
+  --color-marca-fuerte: #5eead4;
+}
+html, body { background: var(--color-fondo); color: var(--color-texto); }
+body { -webkit-tap-highlight-color: transparent; }
+.leaflet-container { font: inherit; background: var(--color-campo); }
+.dark .leaflet-tile { filter: brightness(.75) invert(1) hue-rotate(180deg) contrast(.9); }
+@keyframes pulso { 0% { transform: scale(.6); opacity: .8 } 100% { transform: scale(2.2); opacity: 0 } }
+.pulso::after { content: ""; position: absolute; inset: 0; border-radius: 9999px; background: currentColor; animation: pulso 1.6s ease-out infinite; }
