@@ -1,31 +1,106 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ── Sistema de temas de Fixi ──
+   Los componentes NUNCA usan colores fijos de marca: usan utilidades (bg-marca, text-primary, text-accent…) que
+   Tailwind compila como `color: var(--color-…)`. Cada tema solo redefine esas variables sobre <html> con el atributo
+   data-theme (paleta) y la clase .dark (modo). Cambiar de tema = cambiar un atributo: todo se repinta en el mismo
+   cuadro, sin recargar ni volver a renderizar React. */
 @theme {
-  --color-fondo: #f6f7f5;
+  /* ── Identidad oficial Fixi Mandados · Opción 1: Rojo & Azul ── */
+  --color-fondo: #f4f1ea;          /* blanco roto / crema: fondo ligero y de mapas */
   --color-tarjeta: #ffffff;
-  --color-texto: #1c1917;
-  --color-suave: #6b6b66;
-  --color-borde: #e4e4df;
-  --color-campo: #f1f2ee;
-  --color-marca: #0f766e;
-  --color-marca-fuerte: #115e59;
-  --color-acento: #f59e0b;
+  --color-texto: #1a1d2e;
+  --color-suave: #66697a;
+  --color-borde: #e3ddd0;
+  --color-campo: #ece8de;
+  --color-marca: #3b5bce;          /* PRIMARIO azul royal: marca, botones, navegación, moto y ruta, «xi» y su ✓ */
+  --color-marca-fuerte: #2e4ab0;
+  --color-acento: #b82e2e;         /* SECUNDARIO rojo carmín: «Fi», alertas, EN VIVO */
+  --color-crema: #f4f1ea;          /* pin del logo */
+  --color-fixi-ojo: #f4f1ea;
+  /* Superficie de los campos para escribir: se distingue del fondo en ambos temas (affordance). */
+  --color-entrada: #ffffff;
+  --color-entrada-borde: #d6cfbf;
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
-.dark {
-  --color-fondo: #111312;
-  --color-tarjeta: #1b1e1d;
-  --color-texto: #f1f2ee;
-  --color-suave: #a3a39c;
-  --color-borde: #2c302e;
-  --color-campo: #232725;
-  --color-marca: #2dd4bf;
-  --color-marca-fuerte: #5eead4;
+/* Alias semánticos (primary / accent): `inline` hace que la utilidad apunte a la variable viva, no a su valor. */
+@theme inline {
+  --color-primary: var(--color-marca);
+  --color-accent: var(--color-acento);
 }
+/* Modo oscuro de la identidad oficial: el azul y el rojo se aclaran un paso para leerse sobre fondo oscuro. */
+.dark {
+  --color-fondo: #0e1120;
+  --color-tarjeta: #171b2e;
+  --color-texto: #eef0f8;
+  --color-suave: #a0a5bd;
+  --color-borde: #272c45;
+  --color-campo: #1f2438;
+  --color-marca: #6f8cf0;
+  --color-marca-fuerte: #9bb0f6;
+  --color-acento: #e25555;
+  --color-entrada: rgb(255 255 255 / 0.06); /* oscuro translúcido */
+  --color-entrada-borde: rgb(255 255 255 / 0.14);
+}
+
+/* Tema alternativo · Turquesa (la base anterior) */
+[data-theme="turquesa"] {
+  --color-fondo: #f6f7f5; --color-tarjeta: #ffffff; --color-texto: #1c1917; --color-suave: #6b6b66;
+  --color-borde: #e4e4df; --color-campo: #f1f2ee; --color-entrada-borde: #cbd5e1;
+  --color-marca: #0f766e; --color-marca-fuerte: #115e59; --color-acento: #f59e0b;
+}
+.dark[data-theme="turquesa"] {
+  --color-fondo: #111312; --color-tarjeta: #1b1e1d; --color-texto: #f1f2ee; --color-suave: #a3a39c;
+  --color-borde: #2c302e; --color-campo: #232725; --color-entrada-borde: rgb(255 255 255 / 0.14);
+  --color-marca: #2dd4bf; --color-marca-fuerte: #5eead4; --color-acento: #f59e0b;
+}
+/* Tema alternativo · Azul / Blanco: limpio y corporativo */
+[data-theme="azul"] {
+  --color-fondo: #f5f8ff; --color-tarjeta: #ffffff; --color-texto: #0f172a; --color-suave: #64748b;
+  --color-borde: #e2e8f0; --color-campo: #eef2f9; --color-entrada-borde: #c7d2fe;
+  --color-marca: #1d4ed8; --color-marca-fuerte: #1e40af; --color-acento: #0ea5e9;
+}
+.dark[data-theme="azul"] {
+  --color-fondo: #0b1220; --color-tarjeta: #111a2e; --color-texto: #e2e8f0; --color-suave: #94a3b8;
+  --color-borde: #22304d; --color-campo: #17223a; --color-entrada-borde: rgb(147 197 253 / 0.22);
+  --color-marca: #60a5fa; --color-marca-fuerte: #93c5fd; --color-acento: #38bdf8;
+}
+/* Tema alternativo · Rojo / Gris oscuro: elegante, moderno, agresivo */
+[data-theme="rojogris"] {
+  --color-fondo: #f4f4f5; --color-tarjeta: #ffffff; --color-texto: #18181b; --color-suave: #71717a;
+  --color-borde: #e4e4e7; --color-campo: #ececee; --color-entrada-borde: #d4d4d8;
+  --color-marca: #e11d48; --color-marca-fuerte: #be123c; --color-acento: #3f3f46;
+}
+.dark[data-theme="rojogris"] {
+  --color-fondo: #121214; --color-tarjeta: #1c1c1f; --color-texto: #f4f4f5; --color-suave: #a1a1aa;
+  --color-borde: #323238; --color-campo: #26262a; --color-entrada-borde: rgb(255 255 255 / 0.14);
+  --color-marca: #fb4469; --color-marca-fuerte: #fb7185; --color-acento: #a1a1aa;
+}
+
 html, body { background: var(--color-fondo); color: var(--color-texto); }
-body { -webkit-tap-highlight-color: transparent; }
+body { -webkit-tap-highlight-color: transparent; transition: background-color .35s ease, color .35s ease; }
 .leaflet-container { font: inherit; background: var(--color-campo); }
 .dark .leaflet-tile { filter: brightness(.75) invert(1) hue-rotate(180deg) contrast(.9); }
 @keyframes pulso { 0% { transform: scale(.6); opacity: .8 } 100% { transform: scale(2.2); opacity: 0 } }
 .pulso::after { content: ""; position: absolute; inset: 0; border-radius: 9999px; background: currentColor; animation: pulso 1.6s ease-out infinite; }
+
+/* Fixi está vivo: el pin flota suave cuando espera y su señal late. */
+@keyframes fixi-parpadeo { 0%, 92%, 100% { transform: scaleY(1) } 95% { transform: scaleY(.12) } }
+@keyframes fixi-senal { 0%, 100% { opacity: 1 } 50% { opacity: .35 } }
+@keyframes fixi-flota { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-4px) } }
+.fixi-ojos { transform-box: fill-box; transform-origin: center; animation: fixi-parpadeo 4.5s infinite; }
+.fixi-senal { animation: fixi-senal 2s ease-in-out infinite; }
+.fixi-flota { animation: fixi-flota 2.6s ease-in-out infinite; }
+
+/* Marcador del mototaxista en vivo: se desliza entre posiciones en lugar de saltar (como inDrive/Uber). */
+.fixi-moto { transition: transform 1s linear; }
+@keyframes aparecer { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: none } }
+.aparecer { animation: aparecer .35s cubic-bezier(.2,.8,.2,1) both; }
+
+/* Cambio de tema con revelado circular (View Transitions API); sin soporte, el cambio es instantáneo. */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+@media (prefers-reduced-motion: reduce) {
+  .fixi-ojos, .fixi-senal, .fixi-flota, .aparecer { animation: none; }
+  .fixi-moto, body { transition: none; }
+}
